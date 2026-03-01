@@ -1,0 +1,29 @@
+version: '3.8'
+
+services:
+  mysql:
+    image: mysql:8
+    container_name: mysql-container
+    environment:
+      MYSQL_ROOT_PASSWORD: Reshma1404
+      MYSQL_DATABASE: taskdb
+    ports:
+      - "3307:3306" 
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+  app:
+    build: .
+    container_name: taskmanager-container
+    ports:
+      - "9090:9090"
+    depends_on:
+      - mysql
+    environment:
+      # This overrides properties file settings for Docker specifically
+      - SPRING_DATASOURCE_URL=jdbc:mysql://mysql:3306/taskdb?allowPublicKeyRetrieval=true&useSSL=false
+      - SPRING_DATASOURCE_USERNAME=root
+      - SPRING_DATASOURCE_PASSWORD=Reshma1404
+
+volumes:
+  mysql_data:
